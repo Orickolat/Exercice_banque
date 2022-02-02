@@ -40,8 +40,8 @@ public class BanqueInteraction {
 
     void interactionAjouter1Client() {
         String name="";
-        System.out.print("Quel est le nom du client ?");
-        name = scanner.nextLine(); //nextLine() ne marche pas je ne comprend pas pourquoi.
+        System.out.println("Quel est le nom du client ?");
+        name = scanner.next(); //nextLine() ne marche pas je ne comprend pas pourquoi.
         banqueEcureuil.ajouterClient(name);
     }
 
@@ -79,7 +79,7 @@ public class BanqueInteraction {
                         interactionDepot(identifiant);
                         break;
                     case 4:
-                        InteractionVirement(identifiant, name);
+                        interactionVirement(identifiant, name);
                         break;
                     default:
                         break;
@@ -91,20 +91,17 @@ public class BanqueInteraction {
         }//fin verifClient
     }//interactionOperation
 
-    void InteractionVirement(int identifiant, String name) {
+    void interactionVirement(int identifiant, String name) {
         float montantPognon = valeaurTransaction();
         System.out.println("Le deuxième compte appartient'il au même client ?(Y/N)");
-        if (scanner.next() == "Y") {
+        if (scanner.next().equals("Y")) {
             System.out.println("Quel compte débiter ?");
             int compteNumber = scanner.nextInt();
             if (verificationExistCompte(compteNumber, identifiant)) {
-            } else {
-                System.out.println("Quel compte débiter ?");
+                System.out.println("Quel compte créditer ?");
                 int compteNumber2 = scanner.nextInt();
                 if (verificationExistCompte(compteNumber2, identifiant)) {
-                    if (montantPognon > 0) {
                         virementAuto(identifiant, compteNumber, montantPognon, identifiant, compteNumber2);
-                    }
                 }
             }
         }
@@ -123,11 +120,11 @@ public class BanqueInteraction {
                     int compteNumber= scanner.nextInt();
                     if (verificationExistCompte(compteNumber, identifiant)) {
                         System.out.println("Le client " + name + " est il débiteur ? (Y/N)");
-                        if (scanner.next() == "Y") {
-                            if (montantPognon > 0) {
-                                virementAuto(identifiant, compteNumber, montantPognon, identifiant2, numeroCompte2);
-                            }
-                        } else {virementAuto(identifiant2, numeroCompte2, montantPognon, identifiant, compteNumber);}
+                        if (scanner.next().equals("Y")) {
+                            virementAuto(identifiant, compteNumber, montantPognon, identifiant2, numeroCompte2);
+                        } else {
+                            virementAuto(identifiant2, numeroCompte2, montantPognon, identifiant, compteNumber);
+                        }
                     }
                 }
             }
@@ -172,6 +169,7 @@ public class BanqueInteraction {
                                 listeClients[identifiant2]
                                 .comptes[compteNumber2]
                 );
+        System.out.println("Virement terminé.");
     }
 
     float valeaurTransaction() {
